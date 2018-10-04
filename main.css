@@ -1,0 +1,22 @@
+h1, h4 {
+    padding-top: 20px;
+}
+
+#welcome-section {
+    padding-top: 20px;
+    padding-bottom: 100px;
+}
+
+#taco-section {
+    padding: 100px;
+    background-color:#E4854C;
+    color: white;
+}
+
+#stack-section {
+    padding-top: 50px;
+    padding-bottom: 10px;
+}
+
+
+

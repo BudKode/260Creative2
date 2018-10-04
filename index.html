@@ -30,34 +30,27 @@
                     .always(function() { console.log('getJSON request ended!');
                     });
                 });
-                $("#weatherButton").click(function(e){
+                $("#randomButton").click(function(e){
                     var value = $("#cityField").val();
                     $("#displayCity").text(value);
                     e.preventDefault();
-                    var myurl= "https://api.openweathermap.org/data/2.5/weather?units=imperial&appid=29aa347532a2da89d2d167b6678628a9&q=";
-                    myurl += value;
+                    var myurl= "http://taco-randomizer.herokuapp.com/random/?full-taco=true";
+                    //myurl += value;
                     console.log(myurl);
                     $.ajax({
                         url : myurl,
                         dataType : "json",
                             success : function(parsed_json) {
-                                var location = parsed_json['name'];
-                                var weather = parsed_json['weather'][0]['main'];
-                                var temp = parsed_json['main']['temp'];
-                                var weather_icon = parsed_json['weather'][0]['icon'];
-                                var humidity = parsed_json['main']['humidity'];
-                                var temp_min = parsed_json['main']['temp_min'];
-                                var temp_max = parsed_json['main']['temp_max'];
-                                var wind_speed = parsed_json['wind']['speed'];
-                                everything = "<img src=\"http://openweathermap.org/img/w/" + weather_icon + ".png\"/>"
-                                everything += "<ul>";
-                                everything += "<li>Location: " + location;
-                                everything += "<li>Weather: " + weather + " (" + temp + "&#8457;)";
-                                everything += "<li>Low: " + temp_min + "&#8457; | High: " + temp_max + "&#8457;";
-                                everything += "<li>Humidity: " + humidity + "%";
-                                everything += "<li>Wind: " + wind_speed + " mph";
+                                var base_layer = parsed_json["base_layer"];
+                                var condiment = parsed_json["condiment"];
+                                var mixin = parsed_json["mixin"];
+                                var seasoning = parsed_json["seasoning"];
+                                var shell = parsed_json["shell"];
+                                console.log(base_layer.name)
+                                everything = "<ul>";
+                                everything += "<li>Title: " + base_layer.name;
                                 everything += "</ul>";
-                                $("#weather").html(everything);
+                                $("#tacoResults").html(everything);
                             }
                     });
                 });
@@ -87,33 +80,27 @@
     <body>
         <nav id='header-bar' class="navbar navbar-expand-lg navbar-light bg-light" >
             <a style="color:#E4854C" class="navbar-brand" href="index.html">Home</a>
-            <a style="color:#E4854C" class="nav-item" href="desserts.html">Dessert</a>
-            <a style="color:#E4854C" class="nav-item" href="lunch.html">Lunch</a>
-            <a style="color:#E4854C" class="nav-item" href="dinner.html">Dinner</a>
         </nav>
-        <div id="welcome-section" class="container-fluid text-center">
-            <h1>Welcome to City-Weather-Stack-Exchange Finder!</h1>
-            <p>Ever wondered where you can look up the weather and search topics on 
-            stack exchange on the same page?
-            Look no further!</p>
+        <div id="welcome-section" class="container-fluid">
+            <h1>Welcome to Taco Central!</h1>
+            <h6>Recipes Courtesy of Tanco Fancy</h6>
+            <p>Taco recipes are organized into a base layer, condiment, seasoning, mixin, and shell.
+            Try the random button below to try a new combination!</p>
         </div>
-        <div id="weather-section" class="container-fluid">
+        <div id="taco-section" >
+            <div id="tacoResults"class="row">
+                <div class="container-fluid text-center">
+                    <h2>What's Going to Be Your New Favorite Recipe?</h2>
+                </div>
+            </div>
             <div class="row">
-                <div class="col-6">
-                    <h4>Look Up Your Local Weather!</h4>
-                    <form>
-                        Enter A Utah City: <input type="text" id="cityField" value="">
-                        <input id="weatherButton" type="submit" value="Submit"><br>
-                        Suggestion: <span id="txtHint">Empty</span><br>
-                    </form>
+                <div class="col-6"
+                    
                 </div>
-                <div class="col-3">
-                    <h6>City</h6>
-                    <p id="displayCity">No City</p>
+                <div class="col-6 text-right">
+                    <h4>Try a new Taco!</h4>
+                    <button id="randomButton">Random</button>
                 </div>
-                <div class="col-3">
-                    <h6>Current Weather</h6>
-                    <div id="weather">No weather</div>
                 </div>
             </div>
         </div>
