@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>City Finder</title>
+        <title>Taco Central</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="main.css">
         <script
@@ -9,33 +9,10 @@
         </script>
         <script>
             $(document).ready(function() {
-                $( "#cityField" ).keyup(function() {
-                    var url = "http://bioresearch.byu.edu/cs260/jquery/getcity.cgi?q="+$("#cityField").val();
-                    console.log(url)
-                    $.getJSON(url,function(data) {
-                        console.log(data)
-                        var everything;
-                        everything = "<ul>";
-                        $.each(data, function(i,item) {
-                            everything += "<li> "+data[i].city;
-                        });
-                        everything += "</ul>";
-                        $("#txtHint").html(everything);
-                    })
-                    .done(function() { console.log('getJSON request succeeded!'); })
-                    .fail(function(jqXHR, textStatus, errorThrown) { 
-                        console.log('getJSON request failed! ' + textStatus); 
-                        console.log("incoming "+jqXHR.responseText);
-                    })
-                    .always(function() { console.log('getJSON request ended!');
-                    });
-                });
                 $("#randomButton").click(function(e){
                     var value = $("#cityField").val();
-                    $("#displayCity").text(value);
                     e.preventDefault();
-                    var myurl= "http://taco-randomizer.herokuapp.com/random/?full-taco=true";
-                    //myurl += value;
+                    var myurl= "http://taco-randomizer.herokuapp.com/random/";
                     console.log(myurl);
                     $.ajax({
                         url : myurl,
@@ -46,81 +23,73 @@
                                 var mixin = parsed_json["mixin"];
                                 var seasoning = parsed_json["seasoning"];
                                 var shell = parsed_json["shell"];
-                                console.log(base_layer.name)
-                                everything = "<ul>";
-                                everything += "<li>Title: " + base_layer.name;
+                                console.log(base_layer.name);
+                                everything = "<ul style='list-style:none'>";
+                                everything += "<li onClick='javascript:toggleView(\"base_recipe\")' style='font-size:20px; padding:20px'>Base: " + base_layer.name;
+                                everything += "<li onClick='javascript:toggleView(\"seasoning_recipe\")' style='font-size:20px; padding:20px'>Seasoning: " + seasoning.name;
+                                everything += "<li onClick='javascript:toggleView(\"mixin_recipe\")' style='font-size:20px; padding:20px'>Mixin: " + mixin.name;
+                                everything += "<li onClick='javascript:toggleView(\"condiment_recipe\")' style='font-size:20px; padding:20px'>Condiment: " + condiment.name;
+                                everything += "<li onClick='javascript:toggleView(\"shell_recipe\")' style='font-size:20px; padding:20px'>Shell: " + shell.name;
                                 everything += "</ul>";
                                 $("#tacoResults").html(everything);
-                            }
-                    });
-                });
-                $("#stackButton").click(function(e){
-                    var stackvalue = $("#stackField").val();
-                    e.preventDefault();
-                    var myurl= "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle="+stackvalue+"&site=stackoverflow";
-                    console.log(myurl);
-                    $.ajax({
-                        url : myurl,
-                        dataType : "json",
-                            success : function(parsed_json) {
-                                var items = parsed_json['items'];
-                                everything = "<ul>";
-                                var i;
-                                for (i = 0; i < items.length; i++) { 
-                                    everything += "<li>Title: " + items[i].title;
-                                }
-                                everything += "</ul>";
-                                $("#stack").html(everything);
+                                $("#base_recipe").html(base_layer.recipe);
+                                $("#seasoning_recipe").html(seasoning.recipe);
+                                $("#mixin_recipe").html(mixin.recipe);
+                                $("#condiment_recipe").html(condiment.recipe);
+                                $("#shell_recipe").html(shell.recipe);
                             }
                     });
                 });
             });
+            function toggleView(elementid){
+                document.getElementById("base_recipe").style.display = 'none';
+                document.getElementById("seasoning_recipe").style.display = 'none';
+                document.getElementById("mixin_recipe").style.display = 'none';
+                document.getElementById("condiment_recipe").style.display = 'none';
+                document.getElementById("shell_recipe").style.display = 'none';
+                document.getElementById(elementid).style.display = '';
+            }
         </script>
     </head>
     <body>
         <nav id='header-bar' class="navbar navbar-expand-lg navbar-light bg-light" >
             <a style="color:#E4854C" class="navbar-brand" href="index.html">Home</a>
         </nav>
-        <div id="welcome-section" class="container-fluid">
+        <div id="welcome-section" class="container-fluid" style="padding-top:10px">
             <h1>Welcome to Taco Central!</h1>
-            <h6>Recipes Courtesy of Tanco Fancy</h6>
-            <p>Taco recipes are organized into a base layer, condiment, seasoning, mixin, and shell.
-            Try the random button below to try a new combination!</p>
+            <div class="row">
+                <div class="col-7">
+                    <h6>Recipes Courtesy of Tanco Fancy</h6>
+                    <p>Taco recipes are organized into a base layer, condiment, seasoning, mixin, and shell.
+                        Try the random button below to try a new combination!</p>
+                </div>
+                <div class="col-5 text-left">
+                    <div class="container-fluid" style="padding:20px; background-color:#E4854C">
+                        <img src="tacos.jpg"></img>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="taco-section" >
+        <div id="taco-section" style="color:white; padding-top:100px; padding-bottom:20px; background-color:#E4854C">
             <div id="tacoResults"class="row">
                 <div class="container-fluid text-center">
                     <h2>What's Going to Be Your New Favorite Recipe?</h2>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6"
-                    
-                </div>
-                <div class="col-6 text-right">
-                    <h4>Try a new Taco!</h4>
-                    <button id="randomButton">Random</button>
-                </div>
-                </div>
+            <div class="container-fluid text-right">
+                <h4>Try a new Taco!</h4>
+                <button id="randomButton">Random</button>
             </div>
         </div>
-        <div id="stack-section" class="container-fluid">
-            <div class="row">
-                <div class="col-4">
-                    <h4>Look Up Your Favorite Word on Stack Exchange!</h4>
-                    <form>
-                        Enter a word to search in Stack Exchange: <br>
-                        <input type="text" id="stackField" value=""><br>
-                        <input id="stackButton" type="submit" value="Submit">
-                    </form>
-                </div>
-                <div class="col-8">
-                    <h6>Results</h6>
-                    <div id="stack">No Search</div>
-                </div>
-            </div>
+        <div class="container-fluid" style="padding:100px">
+            <div id="base_recipe" style="display:none">here i am!</div>
+            <div id="seasoning_recipe" style="display:none"></div>
+            <div id="mixin_recipe" style="display:none"></div>
+            <div id="condiment_recipe" style="display:none"></div>
+            <div id="shell_recipe" style="display:none"></div>
+            <br>
+            <br>
         </div>
-        <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     </body>
